@@ -1,0 +1,14 @@
+1.运行rec_topic_LDA_3month.py,跑出来的数据是基础数据，在总表top_topic_trend_summary内
+2.运行rec_topic_LDA_1week.py，增量数据每周都跑一次，新数据的结果在top_topic_trend_week内
+3.运行topic_similarity.py,将增量数据产生的新主题与总表的主题做相似度检验，大于设定的阈值，合并。结果在表top_topic_trend_week的similar_to_topic_in_summary以及similarity_degree，分别代表与总表相似主题的pk值及相似度
+
+
+rec_topic_LDA_textmining0715,docToMatrix已然废弃,但这个token量非常大，出来结果不够好
+先聚出来一些主题，维护这张主题表
+至少一周的新闻吧，热点至少会持续一周
+新的主题产生，与总表的主题比较相似度
+
+Notice:
+1.values是很好的效果指标，相应地，请注意调整主题数，使前者的有效比例在80%之上
+2.topic个数先定为5，看values.txt,有效率低于0.7，手动调整topic个数
+topic_LDA_with_notes.py是备选的，不是正式文件

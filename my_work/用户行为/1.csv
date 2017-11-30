@@ -1,0 +1,12 @@
+ip,date,caid,behave
+10.187.3.44,1.41152E+12,,"{u'action': {}, u'parameter': {}}"
+10.187.3.44,1.41152E+12,,"{u'action': {u'rp1': u'tstv-hd', u'rp2': u'find.do'}, u'parameter': {u'modulation': u'64-QAM', u'STB_ID': u'03111109060569825', u'MAC': u'00:1A:9A:D7:D9:29', u'serviceId': u'106', u'frequency': u'6980000', u'time': u'20140924074307', u'symbolRate': u'106', u'method': u'pauselive', u'smartcard_id': u'1372191566'}}"
+10.187.3.44,1.41152E+12,,"{u'action': {}, u'parameter': {}}"
+10.187.3.44,1.41152E+12,,"{u'action': {u'rp1': u'tstv-hd', u'rp2': u'find.do'}, u'parameter': {u'modulation': u'64-QAM', u'STB_ID': u'03111109060569825', u'MAC': u'00:1A:9A:D7:D9:29', u'serviceId': u'106', u'frequency': u'6980000', u'time': u'20140924074307', u'symbolRate': u'106', u'method': u'pauselive', u'smartcard_id': u'1372191566'}}"
+10.187.3.44,1.41152E+12,,"{u'action': {u'rp1': u'portal', u'rp2': u'index-final.htm'}, u'parameter': {u'STB_ID': u'03111109060569825', u'type': u'512', u'smid': u'1372191566'}}"
+10.187.3.44,1.41152E+12,,"{u'action': {u'rp1': u'portal', u'rp2': u'index-final.htm'}, u'parameter': {u'STB_ID': u'03111109060569825', u'type': u'512', u'smid': u'1372191566'}}"
+10.187.3.44,1.41152E+12,1372191566,"{u'action': {u'rp1': u'vod-hd', u'rp2': u'vod.do'}, u'parameter': {u'INDEX_LEFT_POS': u'1', u'CAID': u'1372191566', u'method': u'vodStart', u'INDEX_MENU_POS': u'1'}}"
+10.187.3.44,1.41152E+12,1372191566,"{u'action': {u'rp1': u'vod-hd', u'rp2': u'_vod.do'}, u'parameter': {u'ng': u'43555', u'ngu': u'http://172.16.88.50:80', u'CAID': u'1372191566', u'INDEX_LEFT_POS': u'1', u'INDEX_MENU_POS': u'1', u'method': u'vodStart'}}"
+10.187.3.44,1.41152E+12,1372191566,"{u'action': {u'rp1': u'vod-hd', u'rp2': u'vod.do'}, u'parameter': {u'INDEX_LEFT_POS': u'1', u'CAID': u'1372191566', u'method': u'vodStart', u'INDEX_MENU_POS': u'1'}}"
+10.187.3.44,1.41152E+12,1372191566,"{u'action': {u'rp1': u'vod-hd', u'rp2': u'_vod.do'}, u'parameter': {u'ng': u'43555', u'ngu': u'http://172.16.88.50:80', u'CAID': u'1372191566', u'INDEX_LEFT_POS': u'1', u'INDEX_MENU_POS': u'1', u'method': u'vodStart'}}"
+10.187.3.44,1.41152E+12,,"{u'action': {u'rp1': u'Gehua-vod', u'rp3': u'index.htm', u'rp2': u'mfdb'}, u'parameter': {}}"

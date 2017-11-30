@@ -1,0 +1,17 @@
+How to run:
+1.运行DataPreparation.py当中的get_tokens()以及docs_to_lists()
+产生结果：list_of_lists.txt以及tokens.txt
+
+
+2.运行docToMatrix.py（以上这两个文件作为输入）
+产生结果part-00000.txt
+
+
+3.运行DataPreparation.py的term_document_matrix_roy_1（）
+产生结果reuters.ldac
+
+4.运行DataPreparation.py的get_title()
+
+5.运行ldaModel.py
+
+最终结果在MySQL中，10.3.3.182，btv数据库的topic_attri表
