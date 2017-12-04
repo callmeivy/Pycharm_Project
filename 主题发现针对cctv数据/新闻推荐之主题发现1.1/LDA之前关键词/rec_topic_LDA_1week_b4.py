@@ -60,7 +60,7 @@ def corpus_to_list():
     #            "CCTV4","CCTV5","CCTV6","CCTV7","CCTV9","QINGXUANZE","WEIBO","WEIXIN","zgdsb","ZHONGGUODIANSHIBAO",\
     #            "中国电视报","央视","央视专区","央视科技","测试"]
     # channel = ["CCTV2","WEIBO", "WEIXIN"]
-    channel = ["CCTV5"]
+    channel = ["WEIXIN"]
     sqlConn = MySQLdb.connect(host='192.168.168.105', user='root', passwd='', db='cctv', charset='utf8')
     sqlcursor = sqlConn.cursor()
     tdm = textmining.TermDocumentMatrix()
@@ -71,28 +71,30 @@ def corpus_to_list():
         print one_type
         word_box = list()
         word_nominal = dict()
-        # id标识，剩余的做测试;数据中有许多“测试”用的，过滤掉;根据id每个类别取90%作为训练集，剩余的是测试集
+        # 1.数据量适中，一次跑完
+            # 含网址的内容删去
+        # sqlcursor.execute('''SELECT ti,content from q_test where channel =  "%s" and length(content) >0 and length(ti) > 0 and content NOT REGEXP 'http://|测试|test' and ti NOT REGEXP '测试|test';''' %(one_type))
+        # # 2.数据量太大，3000条一跑
+        base_number_id_index = 3000
+        sqlcursor.execute(
+            '''SELECT id from q_test where channel =  "%s" and length(content) >0 and length(ti) > 0 and content NOT REGEXP 'http://|测试|test' and ti NOT REGEXP '测试|test';''' % (
+            one_type))
+        id = str(list(sqlcursor.fetchall())).replace("(", "")
+        id = id.replace("[", "")
+        id = id.replace("L", "")
+        id = id.replace("]", "")
+        id = sorted(map(eval, id.replace(",)", "").split(",")))
+        base_number_id_end = id[base_number_id_index]
+        base_number_id_end_2 = id[base_number_id_index*2]
+        # 第一次跑
         # sqlcursor.execute(
-        #     '''SELECT count(*) from q_test where channel =  "%s" and length(content) >0 and ti NOT REGEXP '测试|test';''' % (one_type))
-        # total = list(sqlcursor.fetchone())[0]
-        # base_number_id_index = int(total*0.9)
-        # 像CCTV2,新闻特别多，就写0.06吧
-        # base_number_id_index = int(total * 0.06)
-        # sqlcursor.execute('''SELECT id from q_test where channel =  "%s" and length(content) >0 and ti NOT REGEXP '测试|test';''' % (one_type))
-        # id = str(list(sqlcursor.fetchall())).replace("(", "")
-        # id = id.replace("[", "")
-        # id = id.replace("L", "")
-        # id = id.replace("]", "")
-        # id = sorted(map(eval, id.replace(",)", "").split(",")))
-        # base_number_id_end = id[base_number_id_index*3]
-        # base_number_id_end_2 = id[base_number_id_index * 4]
-        # id标识，剩余的做测试;数据中有许多“测试”用的，过滤掉
-        # sqlcursor.execute('''SELECT ti,content from q_test where channel =  "%s" and id >= "%s" and length(content) >0 and ti NOT REGEXP '测试|test';''' % (one_type, base_number_id_end))
-        # sqlcursor.execute('''SELECT ti,content from q_test where channel =  "%s" and id < "%s" and id > "%s" and length(content) >0 and ti NOT REGEXP '测试|test' limit 2;''' %(one_type, base_number_id_end_2,base_number_id_end))
-        # sqlcursor.execute('''SELECT ti,content from q_test where channel =  "%s" and id > "%s" and length(content) >0 and ti NOT REGEXP '测试|test' limit 2;''' %(one_type, 85076))
-        # sqlcursor.execute('''SELECT ti,content from q_test where channel =  "%s" and length(content) >0 and ti NOT REGEXP '测试|test';''' %(one_type))
-        # 含网址的内容删去
-        sqlcursor.execute('''SELECT ti,content from q_test where channel =  "%s" and length(content) >0 and length(ti) > 0 and content NOT REGEXP 'http://|测试|test' and ti NOT REGEXP '测试|test';''' %(one_type))
+        #     '''SELECT ti,content from q_test where channel =  "%s" and id < "%s" and length(content) >0 and length(ti) > 0 and content NOT REGEXP 'http://|测试|test' and ti NOT REGEXP '测试|test';''' % (
+        #     one_type, base_number_id_end))
+        # 第二次跑
+        sqlcursor.execute(
+            '''SELECT ti,content from q_test where channel =  "%s" and id > "%s" and id < "%s" and length(content) >0 and length(ti) > 0 and content NOT REGEXP 'http://|测试|test' and ti NOT REGEXP '测试|test';''' % (
+                one_type, base_number_id_end,base_number_id_end_2))
+        # ***********end*******************************
         traindata = list(sqlcursor.fetchall())
         ind = 0
         print "doc number:",len(traindata)
@@ -189,7 +191,7 @@ def corpus_to_list():
 
         execfile('docToMatrix.py')
         execfile('formal_matrix_title.py')
-        excuteldamodel(mysqlhostIP='192.168.168.105', how_many_topics = 7, how_many_iteration=100, how_many_topic_words = 30,catcat = one_type,
+        excuteldamodel(mysqlhostIP='192.168.168.105', how_many_topics = 30, how_many_iteration=100, how_many_topic_words = 30,catcat = one_type,
                        dbname='cctv', )
 
 def excuteldamodel(mysqlhostIP, how_many_topics, how_many_iteration, how_many_topic_words,catcat,mysqlUserName = 'root', mysqlPassword = '', dbname = 'cctv'):
@@ -240,15 +242,15 @@ def excuteldamodel(mysqlhostIP, how_many_topics, how_many_iteration, how_many_to
     tempInsert_topic_title = list()
     # title_box = list()
     already_title = list()
-    print "heyhey", count_c
+    # print "heyhey", count_c
     doc_topic_probability = model.fit_transform(X)
     max_title_index = doc_topic_probability.argmax(axis=0)
     doc_topic_again = list(model.fit_transform(X))
-    thefile = open(('values_week %s.txt' %(catcat)), 'w+')
-    thefile.write("LDA有效比例(主题概率分布显著)为 %s：其中划入主题范围的新闻数为%s,总新闻数为%s\n"% (round(float(count_c)/float(len(titles)),2),count_c,len(titles)))
-    for ii in doc_topic_again:
-        thefile.write("%s\n" % str(ii).encode('utf-8'))
-    thefile.close()
+    # thefile = open(('values_week %s.txt' %(catcat)), 'w+')
+    # thefile.write("LDA有效比例(主题概率分布显著)为 %s：其中划入主题范围的新闻数为%s,总新闻数为%s\n"% (round(float(count_c)/float(len(titles)),2),count_c,len(titles)))
+    # for ii in doc_topic_again:
+    #     thefile.write("%s\n" % str(ii).encode('utf-8'))
+    # thefile.close()
     tempInsert = list()
     topic_dict = dict()
     for i, topic_dist in enumerate(topic_word):
@@ -285,10 +287,11 @@ def excuteldamodel(mysqlhostIP, how_many_topics, how_many_iteration, how_many_to
         tempInsert.append(str(bag_of_words))
         # 文章的date
         # 该topic所含的新闻MID
-        for k, v in title_topic.items():
-            if k ==i:
-                news_under_topic = ";".join(v)
-                tempInsert.append(news_under_topic)
+        # for k, v in title_topic.items():
+        #     if k ==i:
+        #         news_under_topic = ";".join(v)
+        #         tempInsert.append(news_under_topic)
+        tempInsert.append("")
         # 数据插入时间段
         tempInsert.append('no_time_period')
         # 数据插入时间

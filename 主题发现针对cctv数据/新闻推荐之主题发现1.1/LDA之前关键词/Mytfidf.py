@@ -107,7 +107,7 @@ def tf_idf_self(completeComment,topNoOfComments):
     tfidf = transformer.fit_transform(vectorizer.fit_transform(commentList2))  # 第一个fit_transform是计算tf-idf，第二个fit_transform是将文本转为词频矩阵
     word = vectorizer.get_feature_names()  # 获取词袋模型中的所有词语
     weight = tfidf.toarray()  # 将tf-idf矩阵抽取出来，元素a[i][j]表示j词在i类文本中的tf-idf权重
-    print type(weight)
+    # print type(weight)
     tf_idf_word_docs =list()
     for i in range(len(weight)):  # 打印每类文本的tf-idf词语权重，第一个for遍历所有文本，第二个for便利某一类文本下的词语权重
         word_weight = dict()
