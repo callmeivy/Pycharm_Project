@@ -60,7 +60,7 @@ def corpus_to_list():
     #            "CCTV4","CCTV5","CCTV6","CCTV7","CCTV9","QINGXUANZE","WEIBO","WEIXIN","zgdsb","ZHONGGUODIANSHIBAO",\
     #            "中国电视报","央视","央视专区","央视科技","测试"]
     # channel = ["CCTV2","WEIBO", "WEIXIN"]
-    channel = ["WEIXIN"]
+    channel = ["WEIBO"]
     sqlConn = MySQLdb.connect(host='192.168.168.105', user='root', passwd='', db='cctv', charset='utf8')
     sqlcursor = sqlConn.cursor()
     tdm = textmining.TermDocumentMatrix()
@@ -86,14 +86,19 @@ def corpus_to_list():
         id = sorted(map(eval, id.replace(",)", "").split(",")))
         base_number_id_end = id[base_number_id_index]
         base_number_id_end_2 = id[base_number_id_index*2]
+        base_number_id_end_3 = id[base_number_id_index*3]
         # 第一次跑
         # sqlcursor.execute(
         #     '''SELECT ti,content from q_test where channel =  "%s" and id < "%s" and length(content) >0 and length(ti) > 0 and content NOT REGEXP 'http://|测试|test' and ti NOT REGEXP '测试|test';''' % (
         #     one_type, base_number_id_end))
         # 第二次跑
+        # sqlcursor.execute(
+        #     '''SELECT ti,content from q_test where channel =  "%s" and id > "%s" and id < "%s" and length(content) >0 and length(ti) > 0 and content NOT REGEXP 'http://|测试|test' and ti NOT REGEXP '测试|test';''' % (
+        #         one_type, base_number_id_end,base_number_id_end_2))
+        # 第三次跑
         sqlcursor.execute(
             '''SELECT ti,content from q_test where channel =  "%s" and id > "%s" and id < "%s" and length(content) >0 and length(ti) > 0 and content NOT REGEXP 'http://|测试|test' and ti NOT REGEXP '测试|test';''' % (
-                one_type, base_number_id_end,base_number_id_end_2))
+                one_type, base_number_id_end_2, base_number_id_end_3))
         # ***********end*******************************
         traindata = list(sqlcursor.fetchall())
         ind = 0
